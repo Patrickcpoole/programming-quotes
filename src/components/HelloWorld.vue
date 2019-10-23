@@ -36,8 +36,8 @@ export default {
     };
   },
   methods: {
-    loadTableData() {
-      fetch(`https://programming-quotes-api.herokuapp.com/quotes`)
+    async loadTableData() {
+      await fetch(`https://programming-quotes-api.herokuapp.com/quotes`)
         .then(response => response.json())
         .then(data => {
           this.programmingQuotes = data;
@@ -45,15 +45,19 @@ export default {
         });
     },
     filterProgrammingQuotes() {
-      this.programmingQuotes = this.programmingQuotes.filter(
-        programmingQuote => {
-          let authorString = programmingQuote["author"].toLowerCase();
-          console.log(authorString.indexOf(this.searchTerm));
-
-          return authorString.indexOf(this.searchTerm) !== -1;
+      let tbody = document.getElementById("tableData");
+      let tr = tbody.getElementsByTagName("tr");
+      this.programmingQuotes.forEach((programmingQuote, i) => {
+        if (
+          programmingQuote["author"].toLowerCase().indexOf(this.searchTerm) > -1
+        ) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
         }
-      );
+      });
     },
+
     sortAuthors() {
       this.sortAuthorDirection = !this.sortAuthorDirection;
 
