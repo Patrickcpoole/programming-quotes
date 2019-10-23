@@ -1,7 +1,8 @@
 <template>
   <div class="container">
     <div class="quote-container">
-      <h1>This is the Author component</h1>
+      <h1>{{programmingQuote.author}}</h1>
+      <p>{{programmingQuote.en}}</p>
     </div>
   </div>
 </template>
@@ -9,94 +10,26 @@
 <script>
 export default {
   name: "Author",
-  props: {
-    msg: String
-  },
+  props: {},
   data() {
     return {
-      programmingQuotes: [],
-      sortAuthorDirection: false,
-      sortQuotesDirection: false,
-      sortRatingsDirection: false,
-      searchTerm: null
+      programmingQuote: [],
+      id: this.$route.params.id
     };
   },
   methods: {
-    async loadTableData() {
-      await fetch(`https://programming-quotes-api.herokuapp.com/quotes/page/1`)
-        .then(response => response.json())
-        .then(data => {
-          this.programmingQuotes = data;
-          console.log(this.programmingQuotes);
-        });
-    },
-    async paginatePage(number) {
+    async loadAuthorData() {
       await fetch(
-        `https://programming-quotes-api.herokuapp.com/quotes/page/${number}`
+        `https://programming-quotes-api.herokuapp.com/quotes/id/${this.id}`
       )
         .then(response => response.json())
         .then(data => {
-          this.programmingQuotes = data;
-          console.log(this.programmingQuotes);
+          this.programmingQuote = data;
         });
-    },
-    filterProgrammingQuotes() {
-      let tbody = document.getElementById("tableData");
-      let tr = tbody.getElementsByTagName("tr");
-      this.programmingQuotes.forEach((programmingQuote, i) => {
-        if (
-          programmingQuote["author"].toLowerCase().indexOf(this.searchTerm) > -1
-        ) {
-          tr[i].style.display = "";
-        } else {
-          tr[i].style.display = "none";
-        }
-      });
-    },
-
-    sortAuthors() {
-      this.sortAuthorDirection = !this.sortAuthorDirection;
-
-      this.programmingQuotes = this.programmingQuotes.sort((a, b) => {
-        return this.sortAuthorDirection
-          ? a["author"] > b["author"]
-            ? 1
-            : -1
-          : a["author"] < b["author"]
-          ? 1
-          : -1;
-      });
-      console.log(this.programmingQuotes);
-    },
-    sortQuotes() {
-      this.sortQuotesDirection = !this.sortQuotesDirection;
-
-      this.programmingQuotes = this.programmingQuotes.sort((a, b) => {
-        return this.sortQuotesDirection
-          ? a["en"] > b["en"]
-            ? 1
-            : -1
-          : a["en"] < b["en"]
-          ? 1
-          : -1;
-      });
-    },
-    sortRatings() {
-      this.sortRatingsDirection = !this.sortRatingsDirection;
-
-      this.programmingQuotes = this.programmingQuotes.sort((a, b) => {
-        return this.sortRatingsDirection
-          ? a["rating"] > b["rating"]
-            ? 1
-            : -1
-          : a["rating"] < b["rating"]
-          ? 1
-          : -1;
-      });
     }
   },
   mounted() {
-    this.loadTableData();
+    this.loadAuthorData();
   }
 };
 </script>

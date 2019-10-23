@@ -9,7 +9,7 @@ Vue.config.productionTip = false;
 Vue.use(VueRouter);
 
 const routes = [
-	{ path: '/author', component: Author },
+	{ path: '/author/:id', name: 'author', component: Author },
 	{ path: '/', component: HelloWorld }
 ];
 

@@ -46,7 +46,7 @@
 
       <table class="uk-table uk-table-divider uk-table-middle uk-table-hover">
         <thead>
-          <tr>
+          <tr class="top-row">
             <th v-on:click="sortAuthors">author</th>
             <th v-on:click="sortQuotes">quote</th>
             <th v-on:click="sortRatings">rating</th>
@@ -54,15 +54,21 @@
         </thead>
 
         <tbody>
-          <router-link tag="a" to="author">
-            <tr v-for="(programmingQuote, i) in programmingQuotes" v-bind:key="i">
-              <td id="first" class="table-data">{{programmingQuote.author}}</td>
+          <tr v-for="(programmingQuote, i) in programmingQuotes" v-bind:key="i">
+            <router-link
+              tag="a"
+              :to="{ name: 'author', params: {id: programmingQuote.id } }"
+              v-bind:id="programmingQuote.id"
+            >
+              <div class="table-data">
+                <td>{{programmingQuote.author}}</td>
 
-              <td class="table-data">"{{programmingQuote.en}}"</td>
+                <td>"{{programmingQuote.en}}"</td>
 
-              <td class="table-data">{{programmingQuote.rating}}</td>
-            </tr>
-          </router-link>
+                <td>{{programmingQuote.rating}}</td>
+              </div>
+            </router-link>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -236,37 +242,41 @@ input[type="submit"] {
 }
 
 tbody {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
 }
 
 thead {
+}
+
+.top-row {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #333;
 }
 
-tr {
+.table-data {
+  width: 100%;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 }
 
 th {
-  cursor: pointer;
+  padding-left: 3em;
+  padding-right: 3em;
+  color: #000;
 }
 
 td {
+  padding-left: 3em;
+  padding-right: 3em;
   font-size: 1rem;
-  text-align: left;
   list-style-type: none;
-  color: black;
+  color: #333;
   text-decoration: none;
-  padding-left: 5em;
-  padding-right: 5em;
-}
-
-#first {
 }
 
 a:hover {
