@@ -1,22 +1,66 @@
 <template>
-  <div class="quote-container">
-    <input v-on:keyup="filterProgrammingQuotes" v-model="searchTerm" id="search">
-    <table class="uk-table uk-table-striped uk-table-middle">
-      <thead>
-        <tr>
-          <th v-on:click="sortAuthors">author</th>
-          <th v-on:click="sortQuotes">quote</th>
-          <th v-on:click="sortRatings">rating</th>
-        </tr>
-      </thead>
-      <tbody id="tableData">
-        <tr v-for="(programmingQuote, i) in programmingQuotes" v-bind:key="i">
-          <td>{{programmingQuote.author}}</td>
-          <td>"{{programmingQuote.en}}"</td>
-          <td>{{programmingQuote.rating}}</td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="container">
+    <div class="quote-container">
+      <div class="header">
+        <h1>Programming Quotes</h1>
+
+        <ul class="uk-pagination uk-flex-center">
+          <li>
+            <a v-on:click="paginatePage('1')">1</a>
+          </li>
+          <li>
+            <a v-on:click="paginatePage('2')">2</a>
+          </li>
+          <li>
+            <a v-on:click="paginatePage('3')">3</a>
+          </li>
+          <li>
+            <a v-on:click="paginatePage('4')">4</a>
+          </li>
+          <li>
+            <a v-on:click="paginatePage('5')">5</a>
+          </li>
+          <li>
+            <a v-on:click="paginatePage('6')">6</a>
+          </li>
+          <li>
+            <a v-on:click="paginatePage('7')">7</a>
+          </li>
+          <li>
+            <a v-on:click="paginatePage('8')">8</a>
+          </li>
+          <li>
+            <a v-on:click="paginatePage('9')">9</a>
+          </li>
+          <li>
+            <a v-on:click="paginatePage('10')">10</a>
+          </li>
+        </ul>
+        <input
+          v-on:keyup="filterProgrammingQuotes"
+          v-model="searchTerm"
+          placeholder="Search"
+          type="text"
+        >
+      </div>
+
+      <table class="uk-table uk-table-divider uk-table-middle">
+        <thead>
+          <tr>
+            <th v-on:click="sortAuthors">author</th>
+            <th v-on:click="sortQuotes">quote</th>
+            <th v-on:click="sortRatings">rating</th>
+          </tr>
+        </thead>
+        <tbody id="tableData">
+          <tr v-for="(programmingQuote, i) in programmingQuotes" v-bind:key="i">
+            <td>{{programmingQuote.author}}</td>
+            <td>"{{programmingQuote.en}}"</td>
+            <td>{{programmingQuote.rating}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -37,7 +81,17 @@ export default {
   },
   methods: {
     async loadTableData() {
-      await fetch(`https://programming-quotes-api.herokuapp.com/quotes`)
+      await fetch(`https://programming-quotes-api.herokuapp.com/quotes/page/1`)
+        .then(response => response.json())
+        .then(data => {
+          this.programmingQuotes = data;
+          console.log(this.programmingQuotes);
+        });
+    },
+    async paginatePage(number) {
+      await fetch(
+        `https://programming-quotes-api.herokuapp.com/quotes/page/${number}`
+      )
         .then(response => response.json())
         .then(data => {
           this.programmingQuotes = data;
@@ -118,16 +172,78 @@ li {
   display: inline-block;
   margin: 0 10px;
 }
-a {
-  color: #42b983;
+
+.header {
+  width: 100%;
+  height: 4em;
+  background: #333;
+  border-radius: 5px 5px 0px 0px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
+h1 {
+  color: #fff;
+  font-size: 1.5em;
+  margin-left: 1.5em;
+  margin-top: 0.75em;
+}
+
+input[type="text"] {
+  padding: 5px;
+  border: 2px solid #ccc;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  margin-right: 3em;
+}
+
+input[type="text"]:focus {
+  border-color: #333;
+}
+
+input[type="submit"] {
+  padding: 5px 15px;
+  background: #ccc;
+  border: 0 none;
+  cursor: pointer;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-image: linear-gradient(
+    to right bottom,
+    rgba(13, 160, 55, 0.8),
+    rgba(14, 183, 196, 0.6)
+  );
+  background-size: cover;
+  height: 100%;
+}
 .quote-container {
   width: 80%;
-  height: 80vh;
+  margin-top: 2em;
+  margin-bottom: 2em;
+  background: white;
+  border-radius: 5px;
+}
+
+tr {
+  margin-left: 2em;
+}
+
+td {
+  font-size: 1rem;
+  text-align: left;
+  margin-left: 20px;
 }
 
 th {
-  text-align: center;
+  text-align: left;
 }
 </style>
