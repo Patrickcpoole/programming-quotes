@@ -5,34 +5,34 @@
         <h1>Programming Quotes</h1>
         <ul class="uk-pagination uk-flex-center">
           <li>
-            <a v-on:click="paginatePage('1')">1</a>
+            <a class="paginate active" v-on:click="paginatePage('1')">1</a>
           </li>
           <li>
-            <a v-on:click="paginatePage('2')">2</a>
+            <a class="paginate" v-on:click="paginatePage('2')">2</a>
           </li>
           <li>
-            <a v-on:click="paginatePage('3')">3</a>
+            <a class="paginate" v-on:click="paginatePage('3')">3</a>
           </li>
           <li>
-            <a v-on:click="paginatePage('4')">4</a>
+            <a class="paginate" v-on:click="paginatePage('4')">4</a>
           </li>
           <li>
-            <a v-on:click="paginatePage('5')">5</a>
+            <a class="paginate" v-on:click="paginatePage('5')">5</a>
           </li>
           <li>
-            <a v-on:click="paginatePage('6')">6</a>
+            <a class="paginate" v-on:click="paginatePage('6')">6</a>
           </li>
           <li>
-            <a v-on:click="paginatePage('7')">7</a>
+            <a class="paginate" v-on:click="paginatePage('7')">7</a>
           </li>
           <li>
-            <a v-on:click="paginatePage('8')">8</a>
+            <a class="paginate" v-on:click="paginatePage('8')">8</a>
           </li>
           <li>
-            <a v-on:click="paginatePage('9')">9</a>
+            <a class="paginate" v-on:click="paginatePage('9')">9</a>
           </li>
           <li>
-            <a v-on:click="paginatePage('10')">10</a>
+            <a class="paginate" v-on:click="paginatePage('10')">10</a>
           </li>
         </ul>
         <input
@@ -60,9 +60,9 @@
               v-bind:id="programmingQuote.id"
             >
               <div class="table-data">
-                <td>{{programmingQuote.author}}</td>
+                <td id="author">{{programmingQuote.author}}</td>
 
-                <td>"{{programmingQuote.en}}"</td>
+                <td id="en-quote">"{{programmingQuote.en}}"</td>
 
                 <td>{{programmingQuote.rating}}</td>
               </div>
@@ -97,6 +97,7 @@ export default {
           this.programmingQuotes = data;
         });
     },
+    // fetch the page number based on the pagination number passed as a parameter
     async paginatePage(number) {
       await fetch(
         `https://programming-quotes-api.herokuapp.com/quotes/page/${number}`
@@ -105,13 +106,30 @@ export default {
         .then(data => {
           this.programmingQuotes = data;
         });
+      // All links returns a nodelist
+      const allLinks = document.querySelectorAll(".paginate");
+
+      allLinks.forEach(link => {
+        if (link.classList.contains("active") && number !== 1) {
+          link.classList.remove("active");
+        }
+      });
+
+      const activeLink = document.querySelector(
+        `.uk-pagination > li:nth-child(${number}) > a`
+      );
+      console.log(activeLink);
+      activeLink.classList.add("active");
     },
-    filterProgrammingQuotes() {
-      let tbody = document.getElementById("tbody");
-      let tr = tbody.getElementsByTagName("tr");
+    async filterProgrammingQuotes() {
+      const tbody = document.getElementById("tbody");
+      const tr = tbody.getElementsByTagName("tr");
+
       this.programmingQuotes.forEach((programmingQuote, i) => {
         if (
-          programmingQuote["author"].toLowerCase().indexOf(this.searchTerm) > -1
+          programmingQuote["author"].toLowerCase().indexOf(this.searchTerm) >
+            -1 ||
+          programmingQuote["en"].toLowerCase().indexOf(this.searchTerm) > -1
         ) {
           tr[i].style.display = "";
         } else {
@@ -248,6 +266,10 @@ td {
   color: #333;
   text-decoration: none;
   text-align: left;
+}
+
+.active {
+  color: white;
 }
 
 tr > a:hover {
