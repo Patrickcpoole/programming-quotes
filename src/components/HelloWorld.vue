@@ -3,7 +3,6 @@
     <div class="quote-container">
       <div class="header">
         <h1>Programming Quotes</h1>
-
         <ul class="uk-pagination uk-flex-center">
           <li>
             <a v-on:click="paginatePage('1')">1</a>
@@ -47,17 +46,17 @@
       <table class="uk-table uk-table-divider uk-table-middle uk-table-hover">
         <thead>
           <tr class="top-row">
-            <th v-on:click="sortAuthors">author</th>
-            <th v-on:click="sortQuotes">quote</th>
-            <th v-on:click="sortRatings">rating</th>
+            <th v-on:click="sortBy('author')">author</th>
+            <th v-on:click="sortBy('en')">quote</th>
+            <th v-on:click="sortBy('rating')">rating</th>
           </tr>
         </thead>
 
-        <tbody>
+        <tbody id="tbody">
           <tr v-for="(programmingQuote, i) in programmingQuotes" v-bind:key="i">
             <router-link
               tag="a"
-              :to="{ name: 'author', params: {id: programmingQuote.id } }"
+              :to="{ name: 'author', params: {id: programmingQuote.id, author:programmingQuote.author } }"
               v-bind:id="programmingQuote.id"
             >
               <div class="table-data">
@@ -96,7 +95,6 @@ export default {
         .then(response => response.json())
         .then(data => {
           this.programmingQuotes = data;
-          console.log(this.programmingQuotes);
         });
     },
     async paginatePage(number) {
@@ -106,11 +104,10 @@ export default {
         .then(response => response.json())
         .then(data => {
           this.programmingQuotes = data;
-          console.log(this.programmingQuotes);
         });
     },
     filterProgrammingQuotes() {
-      let tbody = document.getElementById("tableData");
+      let tbody = document.getElementById("tbody");
       let tr = tbody.getElementsByTagName("tr");
       this.programmingQuotes.forEach((programmingQuote, i) => {
         if (
@@ -123,44 +120,23 @@ export default {
       });
     },
 
-    sortAuthors() {
+    sortBy(heading) {
       this.sortAuthorDirection = !this.sortAuthorDirection;
 
       this.programmingQuotes = this.programmingQuotes.sort((a, b) => {
-        return this.sortAuthorDirection
-          ? a["author"] > b["author"]
-            ? 1
-            : -1
-          : a["author"] < b["author"]
-          ? 1
-          : -1;
-      });
-      console.log(this.programmingQuotes);
-    },
-    sortQuotes() {
-      this.sortQuotesDirection = !this.sortQuotesDirection;
-
-      this.programmingQuotes = this.programmingQuotes.sort((a, b) => {
-        return this.sortQuotesDirection
-          ? a["en"] > b["en"]
-            ? 1
-            : -1
-          : a["en"] < b["en"]
-          ? 1
-          : -1;
-      });
-    },
-    sortRatings() {
-      this.sortRatingsDirection = !this.sortRatingsDirection;
-
-      this.programmingQuotes = this.programmingQuotes.sort((a, b) => {
-        return this.sortRatingsDirection
-          ? a["rating"] > b["rating"]
-            ? 1
-            : -1
-          : a["rating"] < b["rating"]
-          ? 1
-          : -1;
+        if (this.sortAuthorDirection) {
+          if (a[heading] > b[heading]) {
+            return 1;
+          } else {
+            return -1;
+          }
+        } else {
+          if (a[heading] < b[heading]) {
+            return 1;
+          } else {
+            return -1;
+          }
+        }
       });
     }
   },
@@ -170,7 +146,7 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+
 <style scoped>
 ul {
   list-style-type: none;
@@ -227,24 +203,19 @@ input[type="submit"] {
   align-items: center;
   background-image: linear-gradient(
     to right bottom,
-    rgba(13, 160, 55, 0.8),
-    rgba(14, 183, 196, 0.6)
+    rgba(216, 133, 222, 0.8),
+    rgba(30, 183, 217, 0.6)
   );
   background-size: cover;
-  height: 100%;
+  min-height: 100vh;
 }
 .quote-container {
   width: 80%;
+  min-height: 90vh;
   margin-top: 2em;
   margin-bottom: 2em;
   background: white;
   border-radius: 5px;
-}
-
-tbody {
-}
-
-thead {
 }
 
 .top-row {
@@ -257,7 +228,6 @@ thead {
 
 .table-data {
   width: 100%;
-
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -277,9 +247,10 @@ td {
   list-style-type: none;
   color: #333;
   text-decoration: none;
+  text-align: left;
 }
 
-a:hover {
+tr > a:hover {
   list-style-type: none;
   color: black;
   text-decoration: none;
