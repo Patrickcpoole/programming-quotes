@@ -38,9 +38,19 @@ export default {
         .then(response => response.json())
         .then(data => {
           this.programmingQuotes = data;
+
+          // filters out quotes that aren't rated
+
+          this.programmingQuotes = this.programmingQuotes.filter(
+            programmingQuote => {
+              return programmingQuote.rating;
+            }
+          );
           this.$emit("paginationOccured", this.programmingQuotes);
+          //Pass programming quotes up to parent component
+
+          this.pageIndex = page;
         });
-      this.pageIndex = page;
     }
   }
 };

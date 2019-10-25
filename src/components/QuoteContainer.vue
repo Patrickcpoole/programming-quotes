@@ -37,7 +37,7 @@
           <tr v-for="(programmingQuote, i) in programmingQuotes" v-bind:key="i">
             <router-link
               tag="a"
-              :to="{ name: 'quote', params: {id: programmingQuote.id, author:programmingQuote.author } }"
+              :to="{ name: 'quote', params: {id: programmingQuote.id } }"
               v-bind:id="programmingQuote.id"
             >
               <div class="table-data">
@@ -76,6 +76,7 @@ export default {
         .then(response => response.json())
         .then(data => {
           this.programmingQuotes = data;
+
           // filters out quotes that aren't rated
           this.programmingQuotes = this.programmingQuotes.filter(
             programmingQuote => {
@@ -158,31 +159,32 @@ export default {
 
 
 <style scoped>
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-.header {
-  width: 100%;
-  height: 4em;
-  background: #333;
-  border-radius: 5px 5px 0px 0px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
-
 h1 {
   color: #fff;
   font-size: 1.5em;
   margin-left: 1.5em;
   margin-top: 0.75em;
+}
+
+th {
+  padding-left: 3em;
+  padding-right: 2.5em;
+  color: #000;
+  font-size: 1.15rem;
+  font-weight: 500;
+}
+
+th:hover {
+  cursor: pointer;
+}
+
+i {
+  border: solid black;
+  border-width: 0 2px 2px 0;
+  display: inline-block;
+  padding: 3px;
+  margin-left: -2em;
+  margin-bottom: 0.25em;
 }
 
 input[type="text"] {
@@ -206,6 +208,33 @@ input[type="submit"] {
   border-radius: 5px;
 }
 
+td {
+  padding-left: 3.5em;
+  padding-right: 3.5em;
+  font-size: 1rem;
+  list-style-type: none;
+  color: #333;
+  text-decoration: none;
+  text-align: left;
+}
+
+tr > a:hover {
+  list-style-type: none;
+  color: black;
+  text-decoration: none;
+}
+
+.header {
+  width: 100%;
+  height: 4em;
+  background: #333;
+  border-radius: 5px 5px 0px 0px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -219,6 +248,7 @@ input[type="submit"] {
   background-size: cover;
   min-height: 100vh;
 }
+
 .quote-container {
   width: 80%;
   min-height: 90vh;
@@ -245,14 +275,6 @@ input[type="submit"] {
   justify-content: space-between;
 }
 
-th {
-  padding-left: 3em;
-  padding-right: 2.5em;
-  color: #000;
-  font-size: 1.15rem;
-  font-weight: 500;
-}
-
 .th-author {
   display: flex;
   flex-direction: row;
@@ -275,19 +297,6 @@ th {
   padding-right: 2em;
 }
 
-th:hover {
-  cursor: pointer;
-}
-
-i {
-  border: solid black;
-  border-width: 0 2px 2px 0;
-  display: inline-block;
-  padding: 3px;
-  margin-left: -2em;
-  margin-bottom: 0.25em;
-}
-
 .up {
   transform: rotate(-135deg);
   -webkit-transform: rotate(-135deg);
@@ -298,23 +307,7 @@ i {
   -webkit-transform: rotate(45deg);
 }
 
-td {
-  padding-left: 3.5em;
-  padding-right: 3.5em;
-  font-size: 1rem;
-  list-style-type: none;
-  color: #333;
-  text-decoration: none;
-  text-align: left;
-}
-
 .active {
   color: white;
-}
-
-tr > a:hover {
-  list-style-type: none;
-  color: black;
-  text-decoration: none;
 }
 </style>

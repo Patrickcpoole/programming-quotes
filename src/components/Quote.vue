@@ -47,7 +47,6 @@ export default {
         .then(response => response.json())
         .then(data => {
           this.programmingQuote = data;
-          console.log(this.programmingQuote);
         });
     },
 
@@ -55,8 +54,6 @@ export default {
       const starTotal = 5;
 
       const rating = this.programmingQuote.rating;
-
-      console.log(this.programmingQuote.rating);
 
       const starPercentage = (rating / starTotal) * 100;
 
@@ -78,7 +75,7 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+
 <style scoped>
 h1 {
   color: #fff;
@@ -87,8 +84,23 @@ h1 {
   margin-top: 0.75em;
 }
 
+h3 {
+  margin-right: 0.5em;
+  font-size: 1.25rem;
+}
+
 a {
   color: #fff;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+p {
+  margin-right: 15em;
+  margin-left: 15em;
+  font-size: 1.5rem;
 }
 
 .container {
@@ -127,15 +139,6 @@ a {
   margin-bottom: 15em;
 }
 
-.content-conatiner {
-}
-
-p {
-  margin-right: 15em;
-  margin-left: 15em;
-  font-size: 1.5rem;
-}
-
 .info-container {
   display: flex;
   flex-direction: column;
@@ -149,11 +152,6 @@ p {
   justify-content: space-between;
   align-items: center;
   margin-bottom: -3em;
-}
-
-h3 {
-  margin-right: 0.5em;
-  font-size: 1.25rem;
 }
 
 .stars-outer {
