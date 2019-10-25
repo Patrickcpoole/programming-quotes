@@ -1,6 +1,12 @@
 <template>
   <div class="container">
     <div class="quote-container">
+      <div class="header">
+        <router-link tag="a" :to="{ name: 'quoteContainer'}">
+          <h1>Programming Quotes</h1>
+        </router-link>
+      </div>
+
       <p>
         "{{programmingQuote.en}}" -
         <b>
@@ -23,7 +29,7 @@
 
 <script>
 export default {
-  name: "Author",
+  name: "Quote",
   props: {},
   data() {
     return {
@@ -75,10 +81,14 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 h1 {
-  color: #000;
+  color: #fff;
   font-size: 1.5em;
-  margin-left: 1.5em;
+
   margin-top: 0.75em;
+}
+
+a {
+  color: #fff;
 }
 
 .container {
@@ -101,10 +111,8 @@ h1 {
   margin-bottom: 2em;
   background: white;
   border-radius: 5px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+
+  box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.4);
 }
 
 .header {
@@ -114,8 +122,12 @@ h1 {
   border-radius: 5px 5px 0px 0px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+  margin-bottom: 15em;
+}
+
+.content-conatiner {
 }
 
 p {

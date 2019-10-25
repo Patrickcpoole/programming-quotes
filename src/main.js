@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import App from './App.vue';
-import Author from './components/Author';
-import HelloWorld from './components/HelloWorld';
+import Quote from './components/Quote';
+import QuoteContainer from './components/QuoteContainer';
 import VueRouter from 'vue-router';
 
 Vue.config.productionTip = false;
@@ -9,8 +9,8 @@ Vue.config.productionTip = false;
 Vue.use(VueRouter);
 
 const routes = [
-	{ path: '/author/:id', name: 'author', component: Author },
-	{ path: '/', component: HelloWorld }
+	{ path: '/quote/:id', name: 'quote', component: Quote },
+	{ path: '/', name: 'quoteContainer', component: QuoteContainer }
 ];
 
 const router = new VueRouter({

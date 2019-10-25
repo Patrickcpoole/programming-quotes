@@ -2,11 +2,11 @@
   <div class="container">
     <div class="quote-container">
       <div class="header">
-        <h1>Programming Quotes</h1>
         <Pagination
           v-bind:quoteData="programmingQuotes"
           @paginationOccured="programmingQuotes = $event"
         />
+        <h1>Programming Quotes</h1>
         <input
           v-on:keyup="filterProgrammingQuotes"
           v-model="searchTerm"
@@ -18,9 +18,18 @@
       <table class="uk-table uk-table-divider uk-table-middle uk-table-hover">
         <thead>
           <tr class="top-row">
-            <th v-on:click="sortBy('author')">author</th>
-            <th v-on:click="sortBy('en')">quote</th>
-            <th v-on:click="sortBy('rating')">rating</th>
+            <div class="th-author">
+              <th v-on:click="sortBy('author')">author</th>
+              <i class="arrow down"></i>
+            </div>
+            <div class="th-en">
+              <th v-on:click="sortBy('en')">quote</th>
+              <i class="arrow down"></i>
+            </div>
+            <div class="th-rating">
+              <th v-on:click="sortBy('rating')">rating</th>
+              <i class="arrow down"></i>
+            </div>
           </tr>
         </thead>
 
@@ -28,7 +37,7 @@
           <tr v-for="(programmingQuote, i) in programmingQuotes" v-bind:key="i">
             <router-link
               tag="a"
-              :to="{ name: 'author', params: {id: programmingQuote.id, author:programmingQuote.author } }"
+              :to="{ name: 'quote', params: {id: programmingQuote.id, author:programmingQuote.author } }"
               v-bind:id="programmingQuote.id"
             >
               <div class="table-data">
@@ -49,7 +58,7 @@
 <script>
 import Pagination from "./Pagination";
 export default {
-  name: "HelloWorld",
+  name: "QuoteContainer",
 
   components: {
     Pagination
@@ -57,9 +66,7 @@ export default {
   data() {
     return {
       programmingQuotes: [],
-      sortAuthorDirection: false,
-      sortQuotesDirection: false,
-      sortRatingsDirection: false,
+      sortDirection: false,
       searchTerm: null
     };
   },
@@ -69,9 +76,14 @@ export default {
         .then(response => response.json())
         .then(data => {
           this.programmingQuotes = data;
+          // filters out quotes that aren't rated
+          this.programmingQuotes = this.programmingQuotes.filter(
+            programmingQuote => {
+              return programmingQuote.rating;
+            }
+          );
         });
     },
-    // fetch the page number based on the pagination number passed as a parameter
 
     async filterProgrammingQuotes() {
       const tbody = document.getElementById("tbody");
@@ -91,23 +103,51 @@ export default {
     },
 
     sortBy(heading) {
-      this.sortAuthorDirection = !this.sortAuthorDirection;
+      this.sortDirection = !this.sortDirection;
 
-      this.programmingQuotes = this.programmingQuotes.sort((a, b) => {
-        if (this.sortAuthorDirection) {
-          if (a[heading] > b[heading]) {
-            return 1;
+      const arrow = document.querySelector(`.th-${heading} > i`);
+
+      if (this.sortDirection) {
+        arrow.classList.remove("down");
+        arrow.classList.add("up");
+      } else {
+        arrow.classList.remove("up");
+        arrow.classList.add("down");
+      }
+
+      if (heading == "rating") {
+        this.programmingQuotes = this.programmingQuotes.sort((a, b) => {
+          if (this.sortDirection) {
+            if (a[heading] < b[heading]) {
+              return 1;
+            } else {
+              return -1;
+            }
           } else {
-            return -1;
+            if (a[heading] > b[heading]) {
+              return 1;
+            } else {
+              return -1;
+            }
           }
-        } else {
-          if (a[heading] < b[heading]) {
-            return 1;
+        });
+      } else {
+        this.programmingQuotes = this.programmingQuotes.sort((a, b) => {
+          if (this.sortDirection) {
+            if (a[heading] > b[heading]) {
+              return 1;
+            } else {
+              return -1;
+            }
           } else {
-            return -1;
+            if (a[heading] < b[heading]) {
+              return 1;
+            } else {
+              return -1;
+            }
           }
-        }
-      });
+        });
+      }
     }
   },
   mounted() {
@@ -186,6 +226,7 @@ input[type="submit"] {
   margin-bottom: 2em;
   background: white;
   border-radius: 5px;
+  box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.4);
 }
 
 .top-row {
@@ -206,17 +247,60 @@ input[type="submit"] {
 
 th {
   padding-left: 3em;
-  padding-right: 3em;
+  padding-right: 2.5em;
   color: #000;
+  font-size: 1.15rem;
+  font-weight: 500;
+}
+
+.th-author {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.th-en {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.th-rating {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding-right: 2em;
 }
 
 th:hover {
   cursor: pointer;
 }
 
+i {
+  border: solid black;
+  border-width: 0 2px 2px 0;
+  display: inline-block;
+  padding: 3px;
+  margin-left: -2em;
+  margin-bottom: 0.25em;
+}
+
+.up {
+  transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+}
+
+.down {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+
 td {
-  padding-left: 3em;
-  padding-right: 3em;
+  padding-left: 3.5em;
+  padding-right: 3.5em;
   font-size: 1rem;
   list-style-type: none;
   color: #333;
